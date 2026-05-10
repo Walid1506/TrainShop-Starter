@@ -1,0 +1,63 @@
+# Correction — CI GitHub Actions
+
+## Fichier attendu
+
+```text
+.github/workflows/ci.yml
+```
+
+## Correction possible
+
+```yaml
+name: TrainShop Starter CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  test-api:
+    name: Tester API
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: api
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Installer les dépendances
+        run: npm install
+
+      - name: Lancer les tests
+        run: npm test
+
+  docker-build:
+    name: Vérifier les builds Docker
+    runs-on: ubuntu-latest
+    needs: test-api
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Build API
+        run: docker build -t trainshop-api:test ./api
+
+      - name: Build Frontend
+        run: docker build -t trainshop-frontend:test ./frontend
+```

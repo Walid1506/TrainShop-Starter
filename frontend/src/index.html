@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrainShop Starter</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <p class="badge">Projet starter DevOps</p>
+    <h1>TrainShop Starter</h1>
+    <p>Un projet simple pour apprendre Docker, Compose et GitHub Actions.</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Test API</h2>
+      <button id="check-api">Tester /health</button>
+      <pre id="health">Cliquez pour tester l'API.</pre>
+    </section>
+
+    <section class="card">
+      <h2>Produits</h2>
+      <button id="load-products">Charger les produits</button>
+      <div id="products" class="grid"></div>
+    </section>
+
+    <section class="card">
+      <h2>Exercice</h2>
+      <p>Les élèves doivent créer un workflow GitHub Actions qui lance les tests et vérifie les builds Docker.</p>
+    </section>
+  </main>
+
+  <footer>
+    TrainShop Starter — Projet sans CI fournie
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
