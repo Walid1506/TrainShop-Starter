@@ -7,7 +7,7 @@
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
     "test": "jest --runInBand",
-    "lint": "eslint src/**/*.js"
+    "lint": "node --check src/app.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

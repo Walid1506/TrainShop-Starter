@@ -1,47 +1,74 @@
-name: TrainShop CI Suite
+name: TrainShop Starter CI
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  build-test-and-validate:
+  test-api:
+    name: Tester API
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Récupérer le code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Installer Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
 
-      - name: Install API dependencies
+      - name: Installer dépendances API
+        working-directory: api
         run: npm install
-        working-directory: api
 
-      - name: Qualité du code (Lint)
+      - name: Vérifier la qualité du code
+        working-directory: api
         run: npm run lint
-        working-directory: api
 
-      - name: Run API tests
+      - name: Lancer les tests API
+        working-directory: api
         run: npm test
-        working-directory: api
 
-      - name: Build API Docker image
+  docker-build:
+    name: Vérifier les builds Docker
+    runs-on: ubuntu-latest
+    needs: test-api
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Build image API
         run: docker build -t trainshop-api ./api
 
-      - name: Build Frontend Docker image
+      - name: Build image Frontend
         run: docker build -t trainshop-frontend ./frontend
 
-      - name: Run Container & Healthcheck
-        run: |
-          docker run -d --name api-check -p 3000:3000 -e SKIP_DB_CHECK=true trainshop-api
-          sleep 5
-          curl --fail http://localhost:3000/health || exit 1
+      - name: Lancer le conteneur API
+        run: docker run -d --name trainshop-api -p 3000:3000 trainshop-api
 
-      - name: Nettoyage du Container
+      - name: Attendre le démarrage de l’API
+        run: sleep 10
+
+      - name: Afficher les conteneurs Docker
+        run: docker ps -a
+
+      - name: Vérifier /health
+        run: curl -f http://localhost:3000/health
+
+      - name: Afficher les logs API
         if: always()
-        run: docker rm -f api-check
+        run: docker logs trainshop-api
+
+      - name: Afficher les stats Docker
+        if: always()
+        run: docker stats --no-stream
+
+      - name: Nettoyer le conteneur
+        if: always()
+        run: docker rm -f trainshop-api
