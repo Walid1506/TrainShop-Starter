@@ -38,4 +38,4 @@ jobs:
 
       # 14. construire l’image Docker du frontend
       - name: Build Frontend Docker image
-        run: docker build -t trainshop-frontend ./frontendgit init
+        run: docker build -t trainshop-frontend ./frontend
