@@ -1,0 +1,41 @@
+name: TrainShop CI
+
+# 7. se lancer au push sur main
+# 8. se lancer sur pull request vers main
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      # 9. récupérer le code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 10. installer Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 11. installer les dépendances de l’API
+      - name: Install API dependencies
+        run: npm install
+        working-directory: api
+
+      # 12. lancer les tests API
+      - name: Run API tests
+        run: npm test
+        working-directory: api
+
+      # 13. construire l’image Docker de l’API
+      - name: Build API Docker image
+        run: docker build -t trainshop-api ./api
+
+      # 14. construire l’image Docker du frontend
+      - name: Build Frontend Docker image
+        run: docker build -t trainshop-frontend ./frontendgit init

@@ -10,9 +10,19 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.json({
     message: 'Bienvenue sur TrainShop Starter',
-    endpoints: ['/health', '/products']
+    endpoints: ['/health', '/products', '/about']
   });
 });
+
+// --- EXERCICE 1 : Ajout de la route /about ---
+app.get('/about', (req, res) => {
+  res.json({
+    "project": "TrainShop Starter",
+    "module": "DevOps",
+    "objective": "Créer une CI GitHub Actions"
+  });
+});
+// ---------------------------------------------
 
 app.get('/health', async (req, res) => {
   try {
